@@ -2,9 +2,10 @@ var express = require('express');
 var mongoose = require('mongoose');
 var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
+var User = require('./models/user');
 var router = express.Router();
 
-//var path = require('path');
+var path = require('path');
 //var logger = require('morgan');
 //var cookieParser = require('cookie-parser');
 //var routes = require('./routes/index');
@@ -35,13 +36,92 @@ app.use('/', router);
 //app.use(logger('dev'));
 //app.use(bodyParser.json());
 //app.use(cookieParser());
-//app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname, 'public'));
 //app.use('/users', users);
+
+app.use('/api', router);
 
 var homeRoute = router.route('/');
 
 homeRoute.get(function(req, res) {
     res.json({ message: 'Hello World!' });
+});
+
+var userRoute = router.route('/users');
+
+userRoute.get(function(req, res) {
+    User.find({},function (err, users) {
+        if (err)
+            res.status(100).send(err);
+        else {
+            return res.status(200).json({
+                message: "OK",
+                "data": users
+            });
+        }
+    });
+});
+
+userRoute.post(function(req, res) {
+    var user = new User();
+    user.name = req.body.name;
+    user.email = req.body.email;
+    user.repo_ids = req.body.repo_ids;
+
+    User.findOne({email: user.email}, function (err, validation) {
+        if (validation)
+            return res.status(500).json({message: 'This email already exist' + user.email});
+        else {
+            user.save(function (err) {
+                if (err)
+                    res.status(500).send(err);
+                else {
+                    return res.status(201).json({
+                        message: "User added",
+                        data: user
+                    });
+                }
+            });
+        }
+    });
+});
+
+
+userRoute.options(function(req, res){
+    res.writeHead(200);
+    res.end();
+});
+
+//User/:id route
+var userIdRoute = router.route('/users/:id');
+
+userIdRoute.get(function(req, res) {
+    User.findById(req.params.id, function(err, user) {
+        if (err)
+            res.status(404).json(
+                {
+                    "status": "error",
+                    "data": {},
+                    "error": "User not found"
+                }
+            );
+        else if(!user)
+            res.status(404).json(
+                {
+                    "status": "error",
+                    "data": {},
+                    "error": "User not found"
+                }
+            );
+        else {
+            return res.status(200).json(
+                {
+                    "status": "success",
+                    "data": user
+                }
+            );
+        }
+    });
 });
 
 // catch 404 and forward to error handler
