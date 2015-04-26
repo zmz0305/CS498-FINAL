@@ -3,8 +3,22 @@ var mongoose = require('mongoose');
 var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
 var router = express.Router();
+var passport = require('passport')
+    , GoogleStrategy = require('passport-google').Strategy;
+var cookieParser = require('cookie-parser');
+var expressSession = require('express-session');
 
-//var path = require('path');
+passport.use(new GoogleStrategy({
+     returnURL: 'http://www.example.com/auth/google/return',
+     realm: 'http://www.example.com/'
+    },
+    function(identifier, profile, done) {
+     User.findOrCreate({ openId: identifier }, function(err, user) {
+      done(err, user);
+     });
+    }
+));
+var path = require('path');
 //var logger = require('morgan');
 //var cookieParser = require('cookie-parser');
 //var routes = require('./routes/index');
@@ -24,18 +38,25 @@ var allowCrossDomain = function(req, res, next) {
 };
 app.use(allowCrossDomain);
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookiePaser());
+app.use(expressSession({
+    secret: process.env.SESSION_SECRET || 'secret',
+    resave: false,
+    saveUninitialized: false
+}));
 app.use('/', router);
-
+app.use(passport.initialze());
+app.use(passport.session());
 // view engine setup
-//app.set('views', path.join(__dirname, 'views'));
-//app.set('view engine', 'jade');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 //app.use(logger('dev'));
-//app.use(bodyParser.json());
+app.use(bodyParser.json());
 //app.use(cookieParser());
-//app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 //app.use('/users', users);
 
 var homeRoute = router.route('/');
