@@ -170,3 +170,4 @@ __response__:
 }
 ```
 __n.b. the javascript and css resources might also want to be processed so that the final html is enough to looks like a real one. Google search cached page might be a good example (styles and scripts are preloaded)__
+
