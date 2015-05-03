@@ -1,18 +1,29 @@
 Repositories = React.createClass({
+	getInitialState: function() {
+	    return {
+	      repositories : [
+	      {id: "", name: "CS450"},
+	      {id: "", name: "CS498"},
+	      {id: "", name: "CS374"},
+	      {id: "", name: "PHYS326"},
+	      {id: "", name: "PHYS435"}
+	      ],
+	      picture_src : "http://www.gravatar.com/avatar/f26103f436a1f8b884a1feb728001987?s=300"
+	    };
+	},
 	render : function(){
+		var repos = this.state.repositories.map(function(data){
+			return <li><a href="#">{data.name}</a></li>
+		});
 		return(
 				<div className="repositories">
 					<div className="icon">
-						<img src="http://www.gravatar.com/avatar/f26103f436a1f8b884a1feb728001987?s=300" alt=""/>
+						<img src={this.state.picture_src} alt=""/>
 						<p>darwinsenior</p>
 					</div>
 					<div className="repos">
 						<ul>
-							<li><a href="#">CS450</a></li>
-							<li><a href="#">CS498</a></li>
-							<li><a href="#">CS374</a></li>
-							<li><a href="#">PHYS326</a></li>
-							<li><a href="#">PHYS435</a></li>
+							{repos}
 						</ul>
 					</div>
 					<div className="add-repo">

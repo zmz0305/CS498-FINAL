@@ -1,26 +1,24 @@
 var Contents = React.createClass({
+	getInitialState: function() {
+	    return {
+	      contents: [
+	      	{id: "", name: "Homework"},
+	      	{id: "", name: "Announcement"}
+	      ]
+	    };
+	},
 	render : function(){
+		var contents = this.state.contents.map(function(data){
+			return (<Content name={data.name}/>)
+		});
 		return (
 				<div className="contents">
 					<h1>Contents</h1>
-					<div className="content">
-						<div className="header">
-							<span>Homework</span>
-							<a href="#" className="toogleup"></a>
-						</div>
-						<div className="">
-						</div>
-					</div>
-					<div className="content">
-						<div className="header">
-							<span>Homework</span>
-							<a href="#" className="toogleup"></a>
-						</div>
-					</div>
+					{contents}
 					<div className="add-newContent">
 						<a>Add new Content</a>
 					</div>
 				</div>
-		)
+		);
 	}
 })
