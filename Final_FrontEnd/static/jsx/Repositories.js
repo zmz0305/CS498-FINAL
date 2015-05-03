@@ -13,7 +13,7 @@ Repositories = React.createClass({
 	},
 	render : function(){
 		var repos = this.state.repositories.map(function(data){
-			return <li><a href="#">{data.name}</a></li>
+			return (<Repository name={data.name} />)
 		});
 		return(
 				<div className="repositories">
