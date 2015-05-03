@@ -1,5 +1,5 @@
-var Content = React.createClass({
+Content = React.createClass({
 	render: function(){
-		return (<div></div>)
+		return (<div>Hello</div>)
 	}
 })

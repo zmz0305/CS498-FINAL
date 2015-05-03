@@ -5,15 +5,19 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
 		<script src="https://fb.me/JSXTransformer-0.13.2.js"></script>
 		<script src="/js/Page.js" type="text/javascript" charset="utf-8" async defer></script>
+		<script src="/js/Repositories.js" type="text/javascript" charset="utf-8" async defer></script>
+		<script src="/js/Repository.js" type="text/javascript" charset="utf-8" async defer></script>
+		<script src="/js/Contents.js" type="text/javascript" charset="utf-8" async defer></script>
+		<script src="/js/Content.js" type="text/javascript" charset="utf-8" async defer></script>
+	</head>
+	<body>
+		<div id="reactcontent"></div>
 		<script type="text/javascript" defer>
 			console.log("run");
 			window.onload = function(){
-				React.render(React.createElement(Page, null), document.getElementById('content'));
+				React.render(React.createElement(Page, null), document.getElementById('reactcontent'));
 			}
 		</script>
-	</head>
-	<body>
-		<div id="content"></div>
 		<!-- <div class="popup-small invisiable">
 			<form class="pure-form">
 			    <fieldset>
