@@ -1,30 +1,34 @@
 Content = React.createClass({
 	getInitialState: function() {
 	    return {
-	      toggle: "toggleup",
+	      toggle: "fa fa-angle-up",
 	      showContent : false
 	    };
 	},
 	toggle: function(event){
 		if (!this.state.showContent){
 			console.log(this.state.showContent);
-			this.setState({toggle : "toggledown"});
+			this.setState({toggle : "fa fa-angle-down"});
 			this.setState({showContent : true});
 		}else{
 			console.log(this.state.showContent);
-			this.setState({toggle : "toggleup"});
+			this.setState({toggle : "fa fa-angle-up"});
 			this.setState({showContent : false});
 		}
 	},
 	render: function(){
 		var cx = React.addons.classSet;
+		var panelClass = cx({"invisiable": !this.state.showContent});
+		var toggleClass = this.state.toggle;
 		return (
 			<div className="content">
 				<div className="header">
 					<span>{this.props.name}</span>
-					<a href="#" className={this.state.toggle} onClick={this.toggle}>click me</a>
+					<a href="#" onClick={this.toggle}>
+						<i className={toggleClass}></i>
+					</a>
 				</div>
-				<div className={cx({"visiable": !this.state.showContent})}>
+				<div className={panelClass}>
 					Helloworld
 				</div>
 			</div>
