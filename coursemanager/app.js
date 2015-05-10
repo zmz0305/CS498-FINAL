@@ -10,7 +10,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+//var users = require('./routes/users');
 var contents = require('./routes/contents');
 var login = require('./routes/login');
 var repositories = require('./routes/repositories');
@@ -33,10 +33,10 @@ app.use(allowCrossDomain);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
+app.use(express.static(__dirname, '/public'));
 app.use('/api', routes);
 app.use('/api/repositories', repositories);
-app.use('/api/users', users);
+//app.use('/api/user', users);
 app.use('/api/contents', contents);
 
 // view engine setup
@@ -59,14 +59,13 @@ app.use(passport.session());
 app.use(logger('dev'));
 app.use(cookieParser());
 
-app.use(express.static(__dirname, 'public'));
 //app.use('/users', users);
 
 // catch 404 and forward to error handler
 // view engine setup
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
-app.use('/api/login', login);
+app.use('/api/user', login);
 app.set('views', path.join(__dirname, 'views'));
 
 /*
