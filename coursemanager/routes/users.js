@@ -2,35 +2,45 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var Repository = require('../models/repository');
+var passport = require('passport');
 
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+    done(null, obj);
+});
 /* GET users listing. */
 
-//router.get('/', ensureAuthenticated, function(req, res){
-//    User.find({_id: req.user._id}, function(err, user){
-//        if(err)
-//            res.status(100).send(err);
-//        else {
-//            return res.status(200).json({
-//                message: 'OK',
-//                'data': users
-//            });
-//        }
-//    })
-//});
-//
+router.get('/', function(req, res){
+    console.log(req);
 
-router.get('/', function(req, res) {
-    User.find({},function (err, users) {
-        if (err)
+    User.find({_id: req.user._id}, function(err, user){
+        if(err)
             res.status(100).send(err);
         else {
             return res.status(200).json({
-                message: "OK",
-                "data": users
+                message: 'OK',
+                'data': users
             });
         }
-    });
+    })
 });
+
+
+//router.get('/', function(req, res) {
+//    User.find({},function (err, users) {
+//        if (err)
+//            res.status(100).send(err);
+//        else {
+//            return res.status(200).json({
+//                message: "OK",
+//                "data": users
+//            });
+//        }
+//    });
+//});
 
 router.post('/', function(req, res) {
     var user = new User();
@@ -301,6 +311,6 @@ router.post('/:id', function (req, res) {
 });
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-    res.redirect('/')
+    res.redirect('http://www.google.com')
 }
 module.exports = router;

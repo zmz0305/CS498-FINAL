@@ -31,6 +31,7 @@ Repositories = React.createClass({displayName: "Repositories",
 		this.setState({loaded: true});
 		$.get("/api/user", (function(data){
 			if (data.status="success"){
+				console.log(data.data);
 				this.setState({repositories: data.data.repo_ids});
 				this.setState({name: data.data.name});
 				this.setState({email: data.data.email});
