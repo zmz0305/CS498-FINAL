@@ -1,8 +1,15 @@
 Content = React.createClass({
 	getInitialState: function() {
 	    return {
-	      showContent : false
+	      showContent : false,
+	      name : "",
+	      html : undefined
 	    };
+	},
+	componentDidMount: function(){
+		$.get("/api/content", (function(data){
+
+		}).bind(this));
 	},
 	toggle: function(event){
 		if (!this.state.showContent){

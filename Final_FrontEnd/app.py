@@ -5,12 +5,17 @@ app = Flask(__name__, static_folder="static")
 
 @app.route('/')
 def hello_world():
-	return app.send_static_file("index.html")
+	return app.send_static_file("materialised_index.html")
+
+@app.route('/d3js')
+def d3():
+	return app.send_static_file("d3js.html")
 
 @app.route('/<path:path>')
 def static_proxy(path):
-  # send_static_file will guess the correct MIME type
-  return app.send_static_file(path)
+	# send_static_file will guess the correct MIME type
+	return app.send_static_file(path)
+
 
 
 if __name__ == '__main__':
