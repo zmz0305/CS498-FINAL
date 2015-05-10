@@ -5,7 +5,19 @@ var Repository = require('../models/repository');
 
 /* GET users listing. */
 
-
+//router.get('/', ensureAuthenticated, function(req, res){
+//    User.find({_id: req.user._id}, function(err, user){
+//        if(err)
+//            res.status(100).send(err);
+//        else {
+//            return res.status(200).json({
+//                message: 'OK',
+//                'data': users
+//            });
+//        }
+//    })
+//});
+//
 
 router.get('/', function(req, res) {
     User.find({},function (err, users) {
@@ -278,5 +290,8 @@ router.post('/:id', function (req, res) {
     }
     */
 });
-
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) { return next(); }
+    res.redirect('/')
+}
 module.exports = router;
