@@ -29,7 +29,7 @@ Repositories = React.createClass({
 		// {id: "", name: "PHYS435"}
 		// ]
 		this.setState({loaded: true});
-		$.get("repositories/", (function(data){
+		$.get("http://localhost:4000/api/repositories/", (function(data){
 			if (data.status="success"){
 				this.setState({repositories: data.data.repositories});
 				this.setState({name: data.data.name});
@@ -46,8 +46,11 @@ Repositories = React.createClass({
 			var focus = (data == focus_repo)? true : false;
 			return (<Repository repo_id={data} focus={focus} key={data.id}/>)
 		});
+		
 		var picture_src = "http://www.gravatar.com/avatar/"+md5(this.state.email)+"?s=300";
-		var actual_page = (<div className="card">
+		var actual_page = (
+			<div>
+			<div className="card">
 					<div className="card-image">
 						<img src={picture_src} alt=""/>
 					</div>
@@ -62,17 +65,19 @@ Repositories = React.createClass({
 						</a>
 					</li>
 					</ReactCSSTransitionGroup>
-				</ul>);
+				</ul>
+		</div>);
 		var loader = (
 				<div className="preloader-wrapper big active">
 				      <div className="spinner-layer spinner-blue">
 				        <div className="circle-clipper left">
 				          <div className="circle"></div>
-				        </div><div className="gap-patch">
+				        <div className="gap-patch"></div>
 				          <div className="circle"></div>
-				        </div><div className="circle-clipper right">
+				        <div className="circle-clipper right"></div>
 				          <div className="circle"></div>
 				        </div>
+				      </div>
 				      </div>
 			)
 		return (<div className="side-nav fixed">
@@ -80,4 +85,4 @@ Repositories = React.createClass({
 			</div>
 			);
 	}
-})
+});

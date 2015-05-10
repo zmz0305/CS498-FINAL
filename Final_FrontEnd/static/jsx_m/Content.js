@@ -10,7 +10,7 @@ Content = React.createClass({
 		$.get("/api/content", (function(data){
 
 		}).bind(this));
-	}
+	},
 	toggle: function(event){
 		if (!this.state.showContent){
 			this.setState({showContent : true});

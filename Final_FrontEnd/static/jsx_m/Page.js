@@ -3,7 +3,7 @@ Page = React.createClass({
 	getInitialState: function() {
 		window.actions.changeContent = this.changeContent;
 	    return {
-	    	content_id : "";
+	    	content_id : ""
 	    }
 	},
 	changeContent : function(content_id){

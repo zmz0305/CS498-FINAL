@@ -13,7 +13,7 @@ var Contents = React.createClass({
 		// 	"CS498": []
 		// };
 		// this.setState({contents: tmpdata[this.props.content_id]|| this.state.contents});
-		$.get("/api/repositories/"+this.props.content_id, (function (data){
+		$.get("http://localhost:4000/api/repositories/"+this.props.content_id, (function (data){
 			if (this.data.status = "success"){
 				this.setState({contents: data.data.contents});
 			}

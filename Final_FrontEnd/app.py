@@ -5,7 +5,7 @@ app = Flask(__name__, static_folder="static")
 
 @app.route('/')
 def hello_world():
-	return app.send_static_file("index.html")
+	return app.send_static_file("materialised_index.html")
 
 @app.route('/d3js')
 def d3():

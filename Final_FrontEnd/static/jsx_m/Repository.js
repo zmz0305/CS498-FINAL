@@ -17,7 +17,7 @@ Repository = React.createClass({
 		this.setState({loaded: true});
 	},
 	handleClick : function(){
-		window.actions.changeContent(this.props.);
+		window.actions.changeContent(this.props);
 		window.actions.changeRepoFocus(this.props.repo_id);
 	},
 	handleDelete : function(event){
