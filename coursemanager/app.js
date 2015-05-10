@@ -24,9 +24,9 @@ var port = process.env.PORT || 4000;
 
 var allowCrossDomain = function(req, res, next) {
     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
- res.header("Access-Control-Allow-Origin", "*");
- res.header("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
- next();
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
+    next();
 };
 app.set('view engine', 'jade');
 app.use(session({ secret: 'keyboard cat' }));

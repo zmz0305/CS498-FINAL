@@ -1,5 +1,6 @@
 // Load required packages
 var mongoose = require('mongoose');
+findOneOrCreate = require('mongoose-find-one-or-create');
 
 // Define our beer schema
 var UserSchema   = new mongoose.Schema({
@@ -14,6 +15,6 @@ var UserSchema   = new mongoose.Schema({
     },
     repo_ids: [String]
 });
-
+UserSchema.plugin(findOneOrCreate);
 // Export the Mongoose model
 module.exports = mongoose.model('User', UserSchema);
