@@ -1,8 +1,11 @@
 var Contents = React.createClass({
 	getInitialState: function() {
+		window.actions.changeContent = this.changeContent;
 	    return {
-	      contents: [],
-	      loaded : false
+			name : "",
+	    	loaded : false,
+	    	content_ids: [],
+	    	id: ""
 	    };
 	},
 	componentDidMount: function () {
@@ -12,13 +15,23 @@ var Contents = React.createClass({
 		// 	"PHYS326": [{id: "", name: "Announcement"}],
 		// 	"CS498": []
 		// };
-		// this.setState({contents: tmpdata[this.props.content_id]|| this.state.contents});
-		$.get("http://localhost:4000/api/repositories/"+this.props.content_id, (function (data){
-			if (this.data.status = "success"){
-				this.setState({contents: data.data.contents});
-			}
+		// this.setState({content_ids: tmpdata[this.props.content_id]|| this.state.content_ids});
+		// $.get("/api/repositories/"+this.props.content_id, (function (data){
+		// 	if (this.data.status = "success"){
+		// 		this.setState({content_ids: data.data.content_ids});
+		// 	}
+		// 	this.setState({loaded: true});
+		// }).bind(this));
+		if (this.props.content_ids){
 			this.setState({loaded: true});
-		}).bind(this));
+		}
+	},
+	changeContent : function(content_ids, repo_name, id){
+		this.setState({content_ids : content_ids});
+		this.setState({repo_name : repo_name});
+		this.setState({id: id});
+		this.setState({loaded: true});
+		console.log(this.state.id);
 	},
 	componentWillReceiveProps : function(nextProps) {
 		// var tmpdata= {
@@ -27,33 +40,40 @@ var Contents = React.createClass({
 		// 	"PHYS326": [{id: "", name: "Announcement"}],
 		// 	"CS498": []
 		// };
-		// this.setState({contents: tmpdata[nextProps.content_id]|| this.state.contents});
+		// this.setState({content_ids: tmpdata[nextProps.content_id]|| this.state.content_ids});
 	},
 	addContent : function(){
 		var dom = <AddContentModal />
 		window.actions.changeModal(dom, "large");
 	},
 	render : function(){
-		// console.log(this.state.contents);
-		var contents = this.state.contents.map(function(data){
-			return (<Content id={data}/>);
-		});
+		// console.log(this.state.content_ids);
+		var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+		var content_ids = this.state.content_ids.map(function(data){
+				return (<Content content_id={data} key={data} parent_id={this.state.id} />);
+			});
 		var actualPage = (
-			<div className="container">
-				<h1>Class: {this.state.content_id}</h1>
-				<ul className="collapsible">
-				  {contents}
-				  <li className="ctr"><a onClick={this.addContent} className="btn-flat waves-effect waves-light btn-flat expand"><i className="mdi-content-add"></i></a></li>
-				</ul>
-			</div>
+				<div className="container" key={this.state.id}>
+					<h1>Class: {this.state.repo_name}</h1>
+					<ul className="collapsible">
+						<ReactCSSTransitionGroup transitionName="content-change" transitionLeave={false}>
+					  		{content_ids}
+					  	</ ReactCSSTransitionGroup>
+					  <li className="ctr">
+					  	<a onClick={this.addContent} className="btn-flat waves-effect waves-light btn-flat expand">
+					  		<i className="mdi-content-add"></i>
+					  	</a>
+					  </li>
+					</ul>
+				</div>
 		)
-		var loading = (<div className="progress">
+		var loading = (<div className="progress" key="empty">
 				    	<div className="indeterminate"></div>
 					</div>)
-		if (this.state.loaded){
-			return actualPage;
-		}else{
-			return loading;
-		}
+		return (
+			<ReactCSSTransitionGroup transitionName="content-change" transitionLeave={false}>
+				{this.state.loaded ? actualPage : loading}
+			</ReactCSSTransitionGroup>
+			)
 	}
 })

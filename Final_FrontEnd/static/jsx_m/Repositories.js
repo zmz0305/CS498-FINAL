@@ -1,5 +1,10 @@
 Repositories = React.createClass({
 	getInitialState: function() {
+		window.actions.refreshContent = (function(id){
+			if (this.refs["rep"+id]){
+				this.refs["rep"+id].refresh();
+			}
+		}).bind(this);
 		window.actions.changeRepoFocus = this.changeRepoFocus;
 		window.actions.refreshRepositories = this.refresh;
 	    return {
@@ -29,9 +34,9 @@ Repositories = React.createClass({
 		// {id: "", name: "PHYS435"}
 		// ]
 		this.setState({loaded: true});
-		$.get("http://localhost:4000/api/repositories/", (function(data){
+		$.get("/api/user", (function(data){
 			if (data.status="success"){
-				this.setState({repositories: data.data.repositories});
+				this.setState({repositories: data.data.repo_ids});
 				this.setState({name: data.data.name});
 				this.setState({email: data.data.email});
 			}
@@ -44,7 +49,7 @@ Repositories = React.createClass({
 		var focus_repo = this.state.focus_repo;
 		var repos = this.state.repositories.map(function(data){
 			var focus = (data == focus_repo)? true : false;
-			return (<Repository repo_id={data} focus={focus} key={data.id}/>)
+			return (<Repository repo_id={data} focus={focus} key={data.id} refs={"rep"+data} />)
 		});
 		
 		var picture_src = "http://www.gravatar.com/avatar/"+md5(this.state.email)+"?s=300";

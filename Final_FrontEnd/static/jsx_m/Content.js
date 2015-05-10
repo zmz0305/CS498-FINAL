@@ -7,8 +7,11 @@ Content = React.createClass({
 	    };
 	},
 	componentDidMount: function(){
-		$.get("/api/content", (function(data){
-
+		$.get("/api/content/"+this.props.content_id, (function(data){
+			if (data.status == "success"){
+				this.setState({name: data.data.name});
+				this.setState({html: data.data.html});
+			}
 		}).bind(this));
 	},
 	toggle: function(event){
@@ -19,9 +22,16 @@ Content = React.createClass({
 		}
 	},
 	deleteContent: function(event){
-		var del = function(){
-			console.log("deleted!");
-		}
+		var del = (function(){
+			$.post("/api/repositories/"+this.props.content_id,
+				{
+					"action" : "delete_content",
+					"data" : this.props.content_id
+				},
+				function(data){
+					window.actions.refreshContent(this.props.parent_id);
+				})
+		}).bind(this)
 		var dom = (<ConfirmationModal execute={del}>Are you sure you want to delete it?</ConfirmationModal>);
 		window.actions.changeModal(dom);
 	},
@@ -45,7 +55,7 @@ Content = React.createClass({
 							</div>
 						</div>
 					</div>
-					<div className={"collapsible-body "+open}><p>Lorem ipsum dolor sit amet.</p></div>
+					<div className={"collapsible-body "+open}><div dangerouslySetInnerHTML={{__html: this.state.html}} /></div>
 				</li>
 			</div>
 			);
