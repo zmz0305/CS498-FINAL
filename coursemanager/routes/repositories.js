@@ -54,7 +54,7 @@ router.post('/:id', function (req, res) {
         })
     }
 
-    if (req.body.action == "add_content") {
+    else if (req.body.action == "add_content") {
         if ((req.body.data.url == undefined || req.body.data.url == "") && (req.body.data.name == undefined || req.body.data.name == "") && (req.body.data.position == undefined || req.body.data.position == "")) {
             return res.status(500).json({
                 "status": "error",
@@ -152,7 +152,7 @@ router.post('/:id', function (req, res) {
         });
     }
 
-    if (req.body.action == "delete_content") {
+    else if (req.body.action == "delete_content") {
         if (req.body.data.id == undefined || req.body.data.id == "") {
             return res.status(500).json({
                 "status": "error",
@@ -209,6 +209,14 @@ router.post('/:id', function (req, res) {
                     }
                 })
             }
+        })
+    }
+
+    else {
+        return res.status(500).json({
+            "status": "error",
+            "data": {},
+            "error": "Validation Error: The action name is invalid"
         })
     }
 })

@@ -90,7 +90,7 @@ router.post('/:id', function (req, res) {
         })
     }
 
-    if (req.body.action == "add_repo") {
+    else if (req.body.action == "add_repo") {
         if ((req.body.data.url == undefined || req.body.data.url == "") && (req.body.data.name == undefined || req.body.data.name == "")) {
             return res.status(500).json({
                 "status": "error",
@@ -123,7 +123,7 @@ router.post('/:id', function (req, res) {
             if (err)
                 return res.status(500).send(err);
             else {
-                User.update(req.params.id, {$push: {repo_ids: repository._id}}, function (err, user) {
+                User.findByIdAndUpdate(req.params.id, {$push: {repo_ids: repository._id}}, function (err, user) {
                     if (err)
                         res.status(404).json(
                             {
@@ -144,9 +144,9 @@ router.post('/:id', function (req, res) {
                         return res.status(201).json({
                             "status": "add_repo success",
                             "data": {
-                                "email" : user.email,
-                                "name" : user.name,
-                                "repo_ids" : user.repo_ids
+                                "email": user.email,
+                                "name": user.name,
+                                "repo_ids": user.repo_ids
                             }
                         });
                     }
@@ -155,7 +155,7 @@ router.post('/:id', function (req, res) {
         });
     }
 
-    if (req.body.action == "delete_repo") {
+    else if (req.body.action == "delete_repo") {
         if (req.body.data.id == undefined || req.body.data.id == "") {
             return res.status(500).json({
                 "status": "error",
@@ -182,7 +182,7 @@ router.post('/:id', function (req, res) {
                     }
                 );
             else {
-                User.update({_id: req.params.id}, {$pull: {repo_ids: req.body.data.id}}, function (err, user) {
+                User.findByIdAndUpdate(req.params.id, {$pull: {repo_ids: req.body.data.id}}, function (err, user) {
                     if (err)
                         res.status(404).json(
                             {
@@ -203,9 +203,9 @@ router.post('/:id', function (req, res) {
                         return res.status(201).json({
                             "status": "delete_repo success",
                             "data": {
-                                "email": "" + user.email,
-                                "name": "" + user.name,
-                                "repo_ids": "" + user.repo_ids
+                                "email": user.email,
+                                "name": user.name,
+                                "repo_ids": user.repo_ids
                             }
                         });
                     }
@@ -213,6 +213,15 @@ router.post('/:id', function (req, res) {
             }
         })
     }
+
+    else {
+        return res.status(500).json({
+            "status": "error",
+            "data": {},
+            "error": "Validation Error: The action name is invalid"
+        })
+    }
+
 
     /*
     if (req.body.action == "update_repo") {
