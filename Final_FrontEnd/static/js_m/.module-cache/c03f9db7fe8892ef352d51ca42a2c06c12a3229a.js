@@ -9,7 +9,7 @@ var Modal=React.createClass({displayName: "Modal",
 	    	}
 	},
 	changeModal : function(dom, type){
-		// console.log(dom);
+		console.log(dom);
 		this.setState({dom: dom});
 		this.setState({visible: true});
 		this.setState({type: type || ""});

@@ -7,11 +7,8 @@ Content = React.createClass({displayName: "Content",
 	    };
 	},
 	componentDidMount: function(){
-		$.get("/api/content/"+this.props.content_id, (function(data){
-			if (data.status == "success"){
-				this.setState({name: data.data.name});
-				this.setState({html: data.data.html});
-			}
+		$.get("/api/content", (function(data){
+
 		}).bind(this));
 	},
 	toggle: function(event){
@@ -22,16 +19,9 @@ Content = React.createClass({displayName: "Content",
 		}
 	},
 	deleteContent: function(event){
-		var del = (function(){
-			$.post("/api/repositories/"+this.props.content_id,
-				{
-					"action" : "delete_content",
-					"data" : this.props.content_id
-				},
-				function(data){
-					window.actions.refreshContent(this.props.parent_id);
-				})
-		}).bind(this)
+		var del = function(){
+			console.log("deleted!");
+		}
 		var dom = (React.createElement(ConfirmationModal, {execute: del}, "Are you sure you want to delete it?"));
 		window.actions.changeModal(dom);
 	},
@@ -55,7 +45,7 @@ Content = React.createClass({displayName: "Content",
 							)
 						)
 					), 
-					React.createElement("div", {className: "collapsible-body "+open}, React.createElement("div", {dangerouslySetInnerHTML: {__html: this.state.html}}))
+					React.createElement("div", {className: "collapsible-body "+open}, React.createElement("p", null, "Lorem ipsum dolor sit amet."))
 				)
 			)
 			);

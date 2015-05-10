@@ -1,42 +1,30 @@
 Repository = React.createClass({displayName: "Repository",
-	getInitialState: function(){
+	getInitialState: function() {
+		window.actions.changeContent = this.changeContent;
 	    return {
 	    	name : "",
 	    	loaded : false,
-	    	url : "",
-	    	contents: [],
-	    	id : ""
+	    	url : ""
 	    }
 	},
 	componentDidMount: function(){
-		this.refresh();
-	},
-	refresh: function(){
-		$.get("/api/repositories/"+this.props.repo_id, (function(data){
+		$.get("/api/user/"+this.props.repo_id, (function(data){
 			if (data.status == "success"){
-				this.setState({id: data.data.id});
-				this.setState({name: data.data.name});
-				this.setState({url: data.data.url});
-				this.setState({contents: data.data.contents});
+				this.setState({name: name});
+				this.setState({url: url});
 			}
 		}).bind(this));
-		this.setState({loaded: true});	
+		this.setState({loaded: true});
 	},
 	handleClick : function(){
-		window.actions.changeContent(this.state.contents, this.state.name, this.state.id);
+		window.actions.changeContent(this.props);
 		window.actions.changeRepoFocus(this.props.repo_id);
 	},
 	handleDelete : function(event){
-		var del = (function(){
-			$.post('/user',
-				{
-					"action" : "delete_repo",
-					"data" : this.state.id
-				},
-				function(){
-					window.actions.refreshRepositories();
-				});
-		}).bind(this);
+		console.log("je");
+		var del = function(){
+			console.log("deleted!");
+		}
 		var dom = (React.createElement(ConfirmationModal, {execute: del}, "Are you sure you want to delete it?"));
 		window.actions.changeModal(dom);
 		event.stopPropagation();
@@ -51,7 +39,7 @@ Repository = React.createClass({displayName: "Repository",
 				React.createElement("div", {className: "secondary-content", onClick: this.handleDelete}, 
 					React.createElement("i", {className: "fa fa-times"})
 				), 
-				this.state.name
+				this.props.name
 			)
 		);
 		return (this.state.loaded? actual_page : loader);
