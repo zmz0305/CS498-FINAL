@@ -1,26 +1,33 @@
 var Contents = React.createClass({
 	getInitialState: function() {
 	    return {
-	      contents: []
+	      contents: [],
+	      loaded : false
 	    };
 	},
 	componentDidMount: function () {
-		var tmpdata= {
-			"CS450": [{id: "", name: "Homework"}],
-			"CS374": [{id: "", name: "Homework"}, {id: "", name: "Announcement"}],
-			"PHYS326": [{id: "", name: "Announcement"}],
-			"CS498": []
-		};
-		this.setState({contents: tmpdata[this.props.content_id]|| this.state.contents});
+		// var tmpdata= {
+		// 	"CS450": [{id: "", name: "Homework"}],
+		// 	"CS374": [{id: "", name: "Homework"}, {id: "", name: "Announcement"}],
+		// 	"PHYS326": [{id: "", name: "Announcement"}],
+		// 	"CS498": []
+		// };
+		// this.setState({contents: tmpdata[this.props.content_id]|| this.state.contents});
+		$.get("/api/repositories/"+this.props.content_id, (function (data){
+			if (this.data.status = "success"){
+				this.setState({contents: data.data.contents});
+			}
+			this.setState({loaded: true});
+		}).bind(this));
 	},
 	componentWillReceiveProps : function(nextProps) {
-		var tmpdata= {
-			"CS450": [{id: "", name: "Homework"}],
-			"CS374": [{id: "", name: "Homework"}, {id: "", name: "Announcement"}],
-			"PHYS326": [{id: "", name: "Announcement"}],
-			"CS498": []
-		};
-		this.setState({contents: tmpdata[nextProps.content_id]|| this.state.contents});
+		// var tmpdata= {
+		// 	"CS450": [{id: "", name: "Homework"}],
+		// 	"CS374": [{id: "", name: "Homework"}, {id: "", name: "Announcement"}],
+		// 	"PHYS326": [{id: "", name: "Announcement"}],
+		// 	"CS498": []
+		// };
+		// this.setState({contents: tmpdata[nextProps.content_id]|| this.state.contents});
 	},
 	addContent : function(){
 		var dom = <AddContentModal />
@@ -29,19 +36,24 @@ var Contents = React.createClass({
 	render : function(){
 		// console.log(this.state.contents);
 		var contents = this.state.contents.map(function(data){
-			return (<Content name={data.name}/>)
+			return (<Content id={data}/>);
 		});
-		return (
+		var actualPage = (
 			<div className="container">
-				<h1>Class: {this.props.content_id}</h1>
+				<h1>Class: {this.state.content_id}</h1>
 				<ul className="collapsible">
 				  {contents}
 				  <li className="ctr"><a onClick={this.addContent} className="btn-flat waves-effect waves-light btn-flat expand"><i className="mdi-content-add"></i></a></li>
 				</ul>
-				<div className="progress">
-				    <div className="indeterminate"></div>
-				</div>
 			</div>
-		);
+		)
+		var loading = (<div className="progress">
+				    	<div className="indeterminate"></div>
+					</div>)
+		if (this.state.loaded){
+			return actualPage;
+		}else{
+			return loading;
+		}
 	}
 })
