@@ -47,7 +47,7 @@ def static_proxy(path):
 
 @app.route('/html')
 def html():
-	page = urllib.request.urlopen("https://courses.physics.illinois.edu/phys326/")
+	page = urllib.request.urlopen("https://courses.physics.illinois.edu/cs498374/")
 	return page.read()
 
 
