@@ -1,5 +1,12 @@
 Repositories = React.createClass({displayName: "Repositories",
 	getInitialState: function() {
+		window.actions.refreshContent = (function(id){
+            console.log(this.refs);
+            console.log(this.refs["rep"+id]);
+			if (this.refs["rep"+id]){
+                this.refs["rep"+id].refresh();
+			}
+		}).bind(this);
 		window.actions.changeRepoFocus = this.changeRepoFocus;
 		window.actions.refreshRepositories = this.refresh;
 	    return {
@@ -31,12 +38,13 @@ Repositories = React.createClass({displayName: "Repositories",
 		this.setState({loaded: true});
 		$.get("/api/user", (function(data){
 			if (data.status="success"){
-				console.log(data.data);
 				this.setState({repositories: data.data.repo_ids});
 				this.setState({name: data.data.name});
 				this.setState({email: data.data.email});
 			}
-			this.setState({loaded: true});
+            console.log(this.state.repositories);
+
+            this.setState({loaded: true});
 			this.setState({focus_repo : undefined});
 		}).bind(this));
 	},
@@ -45,7 +53,7 @@ Repositories = React.createClass({displayName: "Repositories",
 		var focus_repo = this.state.focus_repo;
 		var repos = this.state.repositories.map(function(data){
 			var focus = (data == focus_repo)? true : false;
-			return (React.createElement(Repository, {repo_id: data, focus: focus, key: data.id}))
+			return (React.createElement(Repository, {repo_id: data, focus: focus, key: data.id, ref: "rep"+data}))
 		});
 		
 		var picture_src = "http://www.gravatar.com/avatar/"+md5(this.state.email)+"?s=300";
@@ -58,14 +66,13 @@ Repositories = React.createClass({displayName: "Repositories",
 					React.createElement("div", {className: "card-content ctr"}, React.createElement("p", null, this.state.name))
 				), 
 				React.createElement("ul", {className: "collection"}, 
-					React.createElement(ReactCSSTransitionGroup, {transitionName: "content-change", transitionLeave: false}, 
-					repos, 
+                    repos, 
 					React.createElement("li", {className: "ctr collection-item"}, 
 						React.createElement("a", {className: "btn-flat waves-effect waves-light btn-flat", onClick: this.addRepo}, 
 							React.createElement("i", {className: "mdi-content-add"})
 						)
 					)
-					)
+
 				)
 		));
 		var loader = (

@@ -5,7 +5,8 @@ var Modal=React.createClass({displayName: "Modal",
 		return {
 	    	dom : undefined,
 	    	visible : false,
-	    	type : ""
+	    	type : "",
+	    	counter : 0
 	    	}
 	},
 	changeModal : function(dom, type){
@@ -13,6 +14,7 @@ var Modal=React.createClass({displayName: "Modal",
 		this.setState({dom: dom});
 		this.setState({visible: true});
 		this.setState({type: type || ""});
+		this.setState({counter : this.state.counter+1});
 	},
 	closeModal : function () {
 		this.setState({visible: false});
@@ -24,7 +26,7 @@ var Modal=React.createClass({displayName: "Modal",
 		return (
 			React.createElement("div", null, 
 				React.createElement("div", {className: modalStatus, id: "lean-overlay", onClick: this.closeModal}), 
-				React.createElement("div", {className: "modal modal-fixed-footer "+modalStatus+type}, 
+				React.createElement("div", {className: "modal modal-fixed-footer "+modalStatus+type, key: this.state.counter}, 
 					this.state.dom
 				)
 			)

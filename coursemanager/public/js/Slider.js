@@ -1,4 +1,4 @@
-var Slider = react.createClass({
+var Slider = React.createClass({displayName: "Slider",
 	getInitialState : function(){
 		return {
 			value : this.props.initValue || 0
@@ -9,6 +9,7 @@ var Slider = react.createClass({
 	},
 	handleChange : function(event){
 		this.setState({value : event.target.value});
+		this.props.changeCallBack(this.state.value);
 	},
 	render : function(){
 		return (React.createElement("div", {className: "range-field"}, 

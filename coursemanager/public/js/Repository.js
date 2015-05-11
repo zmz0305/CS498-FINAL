@@ -1,33 +1,53 @@
 Repository = React.createClass({displayName: "Repository",
-	getInitialState: function() {
+	getInitialState: function(){
 	    return {
 	    	name : "",
 	    	loaded : false,
 	    	url : "",
 	    	contents: [],
-	    	id : ""
+	    	id : "",
+            html : ""
 	    }
 	},
 	componentDidMount: function(){
+		this.refresh();
+	},
+	refresh: function(){
 		$.get("/api/repositories/"+this.props.repo_id, (function(data){
 			if (data.status == "success"){
-				this.setState({id: data.data.id});
+				this.setState({id: data.data._id});
 				this.setState({name: data.data.name});
 				this.setState({url: data.data.url});
 				this.setState({contents: data.data.contents});
+                this.setState({html : data.html});
 			}
+            this.handleClick();
 		}).bind(this));
-		this.setState({loaded: true});
+		this.setState({loaded: true});	
 	},
 	handleClick : function(){
-		window.actions.changeContent(this.state.contents, this.state.name, this.state.id);
+        console.log("output");
+        console.log(this.state);
+		window.actions.changeContent(this.state.contents, this.state.name, this.state.id, this.state.html);
 		window.actions.changeRepoFocus(this.props.repo_id);
 	},
 	handleDelete : function(event){
-		console.log("je");
-		var del = function(){
-			console.log("deleted!");
-		}
+		var del = (function(){
+            console.log(this.state);
+            console.log(this.state.id);
+
+            $.post('/api/user',
+				{
+					"action" : "delete_repo",
+					"data" : {
+                        "id" : this.state.id
+                    }
+				},
+				function(){
+
+                    window.actions.refreshRepositories();
+				});
+		}).bind(this);
 		var dom = (React.createElement(ConfirmationModal, {execute: del}, "Are you sure you want to delete it?"));
 		window.actions.changeModal(dom);
 		event.stopPropagation();
