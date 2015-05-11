@@ -12,12 +12,12 @@ Content = React.createClass({
 			if (data.status == "success"){
 				this.setState({name: data.data.name});
 				this.setState({position: data.data.position});
-				content_data = data.data.position.split(".");
-				var component = $("#page_data");
-				for (var x=1; x<content_data.length; x++){
-					component = componet("nth-child("+content_data[x]+")");
-				}
-				this.setState({html : component.html()});
+				//var component = $("#page_data").find('[label="'+this.state.position+'"]');
+				//for (var x=1; x<content_data.length; x++){
+				//	component = $(component.children()[content_data[x]]);
+				//}
+                //console.log(component);
+				this.setState({html : data.data.position});
 			}
 		}).bind(this));
 	},
@@ -66,7 +66,7 @@ Content = React.createClass({
 						</div>
 					</div>
 					<div className={"collapsible-body "+open}>
-						<div dangerouslySetInnerHTML={{__html: this.state.html}} style="display : none"/>
+						<div dangerouslySetInnerHTML={{__html: this.state.html}} className="ctr" style={{overflow : "scroll", height : "300px"}}/>
 					</div>
 				</li>
 			</div>

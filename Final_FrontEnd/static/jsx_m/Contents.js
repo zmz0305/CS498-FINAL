@@ -2,7 +2,7 @@ var Contents = React.createClass({
 	getInitialState: function() {
 		window.actions.changeContent = this.changeContent;
 	    return {
-			name : "",
+			repo_name : "",
 	    	loaded : false,
 	    	content_ids: [],
 	    	id: "",
@@ -24,45 +24,37 @@ var Contents = React.createClass({
 		// 	}
 		// 	this.setState({loaded: true});
 		// }).bind(this));
-		if (this.props.content_ids){
+		if (this.state.content_ids){
 			this.setState({loaded: true});
 		}
+        this.state.content_ids.each((function(data){
+            traversal($("#page_data"));
+            this.refs[data].componentDidMount();
+        }).bind(this));
+
 	},
-	changeContent : function(content_ids, repo_name, id, url){
+	changeContent : function(content_ids, repo_name, id, html){
 		this.setState({content_ids : content_ids});
 		this.setState({repo_name : repo_name});
 		this.setState({id: id});
 		this.setState({loaded: true});
-		this.setState({url : url})
-		$.get('/api/download', 
-			{url : url},
-			function(data){
-				this.setState({html : data});
-			});
+		this.setState({html : html});
+
 		console.log(this.state.id);
 	},
-	componentWillReceiveProps : function(nextProps) {
-		// var tmpdata= {
-		// 	"CS450": [{id: "", name: "Homework"}],
-		// 	"CS374": [{id: "", name: "Homework"}, {id: "", name: "Announcement"}],
-		// 	"PHYS326": [{id: "", name: "Announcement"}],
-		// 	"CS498": []
-		// };
-		// this.setState({content_ids: tmpdata[nextProps.content_id]|| this.state.content_ids});
-	},
 	addContent : function(){
-		var dom = <AddContentModal url={this.state.url} repo_id={this.state.id}/>
+		var dom = <AddContentModal html={this.state.html} repo_id={this.state.id}/>
 		window.actions.changeModal(dom, "large");
 	},
 	render : function(){
 		// console.log(this.state.content_ids);
 		var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 		var content_ids = this.state.content_ids.map((function(data){
-				return (<Content content_id={data} key={data} parent_id={this.state.id} />);
+				return (<Content content_id={data} key={data} parent_id={this.state.id} ref={data} />);
 			}).bind(this));
 		var actualPage = (
-				<div className="container" key={this.state.id}>
-					<div dangerouslySetInnerHTML={{__html: this.state.html}} id="page_data" style="display : none"/>
+				<div className="container" key={this.state.id+this.state.repo_name}>
+                    <div id="page_data" dangerouslySetInnerHTML={{__html: this.state.html}} style={{display : "none"}}/>
 					<h1>Class: {this.state.repo_name}</h1>
 					<ul className="collapsible">
 						<ReactCSSTransitionGroup transitionName="content-change" transitionLeave={false}>

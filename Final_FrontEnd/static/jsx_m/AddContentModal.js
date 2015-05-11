@@ -7,20 +7,22 @@ var AddContentModal = React.createClass({
 	addQueue : function(event){
 		event.stopPropagation();
 		var label = $(event.target).attr("label");
-		$.post("/repositories/"+this.props.repo_id,
+		$.post("/api/repositories/"+this.props.repo_id,
 			{
 				action : "add_content",
 				data : {
-					name : "",
-					position : label
+					name : this.refs.name.getValue(),
+					position : $(event.target).html()
 				}
-			}, function(){
+			}, (function(){
 				window.actions.closeModal();
-			});
+                window.actions.refreshContent(this.props.repo_id);
+			}).bind(this));
 		// this.setState({comps: this.getComponents(label)});
 	},
 	addClick : function(node){
 		var addClick = this.addClick;
+        console.log("hehe");
 		$(node).unbind();
 		$(node).click(this.addQueue);
 		node.children().each(function(){
@@ -29,16 +31,16 @@ var AddContentModal = React.createClass({
 	},
 	componentDidMount : function(){
 		// var iframe_window = React.findDOMNode(this.refs.window).contentWindow;
-		$.get("/html", (function(data){
-			this.data = data;
-			// var html = $.parseHTML(data);
-			// iframe_window.document.open();
-			// iframe_window.document.write(data);
-			// iframe_window.document.close();
-			$("#loadFrame").append(data);
+		//$.get("/api/download/",
+         //   {url : this.prop.url},
+         //   (function(data){
+		//	this.data = data;
+		//
+		//	$("#loadFrame").append(data);
 			traversal($('#loadFrame'));
-			this.addClick($("#loadFrame"));
-		}).bind(this));
+            console.log("hello");
+		    this.addClick($("#loadFrame"));
+		//}).bind(this));
 	},
 	handleCancel: function(){
 		window.actions.closeModal();
@@ -47,8 +49,9 @@ var AddContentModal = React.createClass({
 		return(
 			<div>
 				<div className="modal-content">
+                        <Input ref="name" label="Name"/>
 						<div>
-							<div id="loadFrame" ></div>
+							<div id="loadFrame" dangerouslySetInnerHTML={{__html: this.props.html}}></div>
 						</div>
 				</div>
 				<div className="modal-footer">

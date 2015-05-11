@@ -5,7 +5,8 @@ Repository = React.createClass({
 	    	loaded : false,
 	    	url : "",
 	    	contents: [],
-	    	id : ""
+	    	id : "",
+            html : ""
 	    }
 	},
 	componentDidMount: function(){
@@ -18,6 +19,7 @@ Repository = React.createClass({
 				this.setState({name: data.data.name});
 				this.setState({url: data.data.url});
 				this.setState({contents: data.data.contents});
+                this.setState({html : data.html});
 			}
             this.handleClick();
 		}).bind(this));
@@ -26,7 +28,7 @@ Repository = React.createClass({
 	handleClick : function(){
         console.log("output");
         console.log(this.state);
-		window.actions.changeContent(this.state.contents, this.state.name, this.state.id, this.state.url);
+		window.actions.changeContent(this.state.contents, this.state.name, this.state.id, this.state.html);
 		window.actions.changeRepoFocus(this.props.repo_id);
 	},
 	handleDelete : function(event){
