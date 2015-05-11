@@ -58,7 +58,7 @@ router.get('/', ensureAuthenticated, function(req, res){
     })
 });
 
-router.post('/', function (req, res) {
+router.post('/', ensureAuthenticated, function (req, res) {
     if (req.body.action == "undefined" || req.body.action == "") {
         return res.status(500).json({
             "status": "error",
