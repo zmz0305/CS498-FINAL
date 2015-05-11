@@ -3,12 +3,22 @@ Content = React.createClass({
 	    return {
 	      showContent : false,
 	      name : "",
-	      html : undefined
+	      position : "0",
+	      html : ""
 	    };
 	},
 	componentDidMount: function(){
-		$.get("/api/content", (function(data){
-
+		$.get("/api/contents/"+this.props.content_id, (function(data){
+			if (data.status == "success"){
+				this.setState({name: data.data.name});
+				this.setState({position: data.data.position});
+				content_data = data.data.position.split(".");
+				var component = $("#page_data");
+				for (var x=1; x<content_data.length; x++){
+					component = componet("nth-child("+content_data[x]+")");
+				}
+				this.setState({html : component.html()});
+			}
 		}).bind(this));
 	},
 	toggle: function(event){
@@ -19,15 +29,25 @@ Content = React.createClass({
 		}
 	},
 	deleteContent: function(event){
-		var del = function(){
-			console.log("deleted!");
-		}
+		var del = (function(){
+			$.post("/api/repositories/"+this.props.parent_id,
+				{
+					"action" : "delete_content",
+					"data" : {
+                        "id": this.props.content_id
+                    }
+				},
+                (function(data){
+					window.actions.refreshContent(this.props.parent_id);
+				}).bind(this))
+		}).bind(this)
 		var dom = (<ConfirmationModal execute={del}>Are you sure you want to delete it?</ConfirmationModal>);
 		window.actions.changeModal(dom);
 	},
 	render: function(){
 		var cx = React.addons.classSet;
 		var open = this.state.showContent ? "open" : "close";
+        console.log(this.state);
 		return (
 			<div>
 				<li>
@@ -35,7 +55,7 @@ Content = React.createClass({
 						<div className="row">
 							<div className="col s10" onClick={this.toggle}>
 								<i className="fa fa-bookmark"></i>
-								{this.props.name}
+								{this.state.name}
 							</div>
 							<div className="col s2 right-align">
 								<a className="btn-flat" onClick={this.deleteContent}>
@@ -45,7 +65,9 @@ Content = React.createClass({
 							</div>
 						</div>
 					</div>
-					<div className={"collapsible-body "+open}><p>Lorem ipsum dolor sit amet.</p></div>
+					<div className={"collapsible-body "+open}>
+						<div dangerouslySetInnerHTML={{__html: this.state.html}} style="display : none"/>
+					</div>
 				</li>
 			</div>
 			);

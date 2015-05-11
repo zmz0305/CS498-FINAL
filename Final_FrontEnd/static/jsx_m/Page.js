@@ -1,27 +1,22 @@
 window.actions = {}
 Page = React.createClass({
 	getInitialState: function() {
-		window.actions.changeContent = this.changeContent;
+		// window.actions.changeContent = this.changeContent;
 	    return {
-	    	content_id : ""
+	    	// content_ids : [],
+	    	// repo_name : ""
 	    }
 	},
-	changeContent : function(content_id){
-		// console.log(content_id);
-		this.setState({content_id : content_id});
-	},
 	render : function(){
-		var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-		var content = <Contents content_id={this.state.content_id} key={this.state.content_id} />;
+		
+		var content = <Contents content_ids={this.state.content_ids} key={this.state.repo_id} repo_name={this.state.repo_name} />;
 		return(
 		<div>
 			<header>
 				<Repositories />
 			</header>
 			<main id="main">
-				<ReactCSSTransitionGroup transitionName="content-change" transitionLeave={false}>
-					{content}
-				</ReactCSSTransitionGroup>
+				<Contents />
 			</main>
 			<Modal />
 			<Toast />

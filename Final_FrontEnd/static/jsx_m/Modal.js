@@ -5,14 +5,16 @@ var Modal=React.createClass({
 		return {
 	    	dom : undefined,
 	    	visible : false,
-	    	type : ""
+	    	type : "",
+	    	counter : 0
 	    	}
 	},
 	changeModal : function(dom, type){
-		console.log(dom);
+		// console.log(dom);
 		this.setState({dom: dom});
 		this.setState({visible: true});
 		this.setState({type: type || ""});
+		this.setState({counter : this.state.counter+1});
 	},
 	closeModal : function () {
 		this.setState({visible: false});
@@ -24,7 +26,7 @@ var Modal=React.createClass({
 		return (
 			<div>
 				<div className={modalStatus} id="lean-overlay" onClick={this.closeModal}></div>
-				<div className = {"modal modal-fixed-footer "+modalStatus+type}>
+				<div className = {"modal modal-fixed-footer "+modalStatus+type} key={this.state.counter}>
 					{this.state.dom}
 				</div>
 			</div>

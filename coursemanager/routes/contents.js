@@ -37,11 +37,13 @@ router.get('/:id', function(req, res) {
             );
         else {
             return res.status(200).json({
-                id: content._id,
-                url: content.url,
-                name: content.name,
-                position: content.position
-
+                "status" : "success",
+                "data" : {
+                    id: content._id,
+                    url: content.url,
+                    name: content.name,
+                    position: content.position
+                }
             });
         }
     });

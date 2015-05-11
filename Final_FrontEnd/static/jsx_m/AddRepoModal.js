@@ -1,13 +1,24 @@
 var AddRepoModal = React.createClass({
 	getInitialState : function(){
-		return {};
+		return {
+		};
 	},
 	handleCancel: function(){
 		window.actions.closeModal();
 	},
 	handleConfirm : function(){
-		window.actions.closeModal();
-		window.actions.refreshRepositories();
+		$.post('/api/user/', 
+			{
+				action : "add_repo",
+				data : {
+					url : this.refs.repo_name.getValue(),
+					name : this.refs.repo_name.getValue()
+				}
+			}, 
+			function(data){
+				window.actions.closeModal();
+				window.actions.refreshRepositories();
+			});
 	},
 	render : function(){
 		return (
@@ -27,3 +38,5 @@ var AddRepoModal = React.createClass({
 		)
 	}
 });
+
+

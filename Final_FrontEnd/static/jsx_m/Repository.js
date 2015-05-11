@@ -1,30 +1,51 @@
 Repository = React.createClass({
-	getInitialState: function() {
-		window.actions.changeContent = this.changeContent;
+	getInitialState: function(){
 	    return {
 	    	name : "",
 	    	loaded : false,
-	    	url : ""
+	    	url : "",
+	    	contents: [],
+	    	id : ""
 	    }
 	},
 	componentDidMount: function(){
-		$.get("/api/user/"+this.props.repo_id, (function(data){
+		this.refresh();
+	},
+	refresh: function(){
+		$.get("/api/repositories/"+this.props.repo_id, (function(data){
 			if (data.status == "success"){
-				this.setState({name: name});
-				this.setState({url: url});
+				this.setState({id: data.data._id});
+				this.setState({name: data.data.name});
+				this.setState({url: data.data.url});
+				this.setState({contents: data.data.contents});
 			}
+            this.handleClick();
 		}).bind(this));
-		this.setState({loaded: true});
+		this.setState({loaded: true});	
 	},
 	handleClick : function(){
-		window.actions.changeContent(this.props);
+        console.log("output");
+        console.log(this.state);
+		window.actions.changeContent(this.state.contents, this.state.name, this.state.id, this.state.url);
 		window.actions.changeRepoFocus(this.props.repo_id);
 	},
 	handleDelete : function(event){
-		console.log("je");
-		var del = function(){
-			console.log("deleted!");
-		}
+		var del = (function(){
+            console.log(this.state);
+            console.log(this.state.id);
+
+            $.post('/api/user',
+				{
+					"action" : "delete_repo",
+					"data" : {
+                        "id" : this.state.id
+                    }
+				},
+				function(){
+
+                    window.actions.refreshRepositories();
+				});
+		}).bind(this);
 		var dom = (<ConfirmationModal execute={del}>Are you sure you want to delete it?</ConfirmationModal>);
 		window.actions.changeModal(dom);
 		event.stopPropagation();
@@ -39,7 +60,7 @@ Repository = React.createClass({
 				<div className="secondary-content" onClick={this.handleDelete}>
 					<i className="fa fa-times"></i>
 				</div>
-				{this.props.name}
+				{this.state.name}
 			</li>
 		);
 		return (this.state.loaded? actual_page : loader);

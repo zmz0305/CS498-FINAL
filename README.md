@@ -40,7 +40,9 @@ or
 ```javascript
 {
 	"action": "delete_repo",
-	"data": repo_id
+	"data": {
+	    id: repo_id
+	}
 }
 ```
 or (in the future not sure if we need it anytime soon)

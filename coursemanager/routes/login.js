@@ -3,8 +3,10 @@ var express = require('express')
     , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
     , mongoose = require('mongoose')
     , User = require('../models/user')
+    , Repository = require('../models/repository')
     , findOneOrCreate = require('mongoose-find-one-or-create');
 var router = express.Router();
+
 //User.plugin(findOneOrCreate);
 var GOOGLE_CLIENT_ID = '84495535310-0qhsb2ogf9316dv35rhl6f4ap773uq4h.apps.googleusercontent.com'
     , GOOGLE_CLIENT_SECRET = 'tR8P0lvfM_1LSHfVT9asQ2PG';
@@ -51,8 +53,8 @@ router.get('/', ensureAuthenticated, function(req, res){
             res.status(100).send(err);
         else {
             return res.status(200).json({
-                message: 'OK',
-                'data': user[0]
+                "status": "success",
+                "data": user[0]
             });
         }
     })
@@ -134,6 +136,7 @@ router.post('/', ensureAuthenticated, function (req, res) {
 
     else if (req.body.action == "delete_repo") {
         if (req.body.data.id == undefined || req.body.data.id == "") {
+            console.log("SORRY");
             return res.status(500).json({
                 "status": "error",
                 "data": {},
