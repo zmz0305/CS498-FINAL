@@ -7,7 +7,7 @@ Content = React.createClass({
 	    };
 	},
 	componentDidMount: function(){
-		$.get("/api/content/"+this.props.content_id, (function(data){
+		$.get("/api/contents/"+this.props.content_id, (function(data){
 			if (data.status == "success"){
 				this.setState({name: data.data.name});
 				this.setState({html: data.data.html});
@@ -23,14 +23,16 @@ Content = React.createClass({
 	},
 	deleteContent: function(event){
 		var del = (function(){
-			$.post("/api/repositories/"+this.props.content_id,
+			$.post("/api/repositories/"+this.props.parent_id,
 				{
 					"action" : "delete_content",
-					"data" : this.props.content_id
+					"data" : {
+                        "id": this.props.content_id
+                    }
 				},
-				function(data){
+                (function(data){
 					window.actions.refreshContent(this.props.parent_id);
-				})
+				}).bind(this))
 		}).bind(this)
 		var dom = (<ConfirmationModal execute={del}>Are you sure you want to delete it?</ConfirmationModal>);
 		window.actions.changeModal(dom);
@@ -38,6 +40,7 @@ Content = React.createClass({
 	render: function(){
 		var cx = React.addons.classSet;
 		var open = this.state.showContent ? "open" : "close";
+        console.log(this.state);
 		return (
 			<div>
 				<li>
@@ -45,7 +48,7 @@ Content = React.createClass({
 						<div className="row">
 							<div className="col s10" onClick={this.toggle}>
 								<i className="fa fa-bookmark"></i>
-								{this.props.name}
+								{this.state.name}
 							</div>
 							<div className="col s2 right-align">
 								<a className="btn-flat" onClick={this.deleteContent}>
@@ -55,7 +58,7 @@ Content = React.createClass({
 							</div>
 						</div>
 					</div>
-					<div className={"collapsible-body "+open}><div dangerouslySetInnerHTML={{__html: this.state.html}} /></div>
+					<div className={"collapsible-body "+open}>{this.state.html}</div>
 				</li>
 			</div>
 			);

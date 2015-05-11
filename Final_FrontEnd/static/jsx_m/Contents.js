@@ -49,9 +49,9 @@ var Contents = React.createClass({
 	render : function(){
 		// console.log(this.state.content_ids);
 		var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-		var content_ids = this.state.content_ids.map(function(data){
+		var content_ids = this.state.content_ids.map((function(data){
 				return (<Content content_id={data} key={data} parent_id={this.state.id} />);
-			});
+			}).bind(this));
 		var actualPage = (
 				<div className="container" key={this.state.id}>
 					<h1>Class: {this.state.repo_name}</h1>

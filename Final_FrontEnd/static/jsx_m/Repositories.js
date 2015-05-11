@@ -1,8 +1,10 @@
 Repositories = React.createClass({
 	getInitialState: function() {
 		window.actions.refreshContent = (function(id){
+            console.log(this.refs);
+            console.log(this.refs["rep"+id]);
 			if (this.refs["rep"+id]){
-				this.refs["rep"+id].refresh();
+                this.refs["rep"+id].refresh();
 			}
 		}).bind(this);
 		window.actions.changeRepoFocus = this.changeRepoFocus;
@@ -40,7 +42,9 @@ Repositories = React.createClass({
 				this.setState({name: data.data.name});
 				this.setState({email: data.data.email});
 			}
-			this.setState({loaded: true});
+            console.log(this.state.repositories);
+
+            this.setState({loaded: true});
 			this.setState({focus_repo : undefined});
 		}).bind(this));
 	},
@@ -49,7 +53,7 @@ Repositories = React.createClass({
 		var focus_repo = this.state.focus_repo;
 		var repos = this.state.repositories.map(function(data){
 			var focus = (data == focus_repo)? true : false;
-			return (<Repository repo_id={data} focus={focus} key={data.id} refs={"rep"+data} />)
+			return (<Repository repo_id={data} focus={focus} key={data.id} ref={"rep"+data} />)
 		});
 		
 		var picture_src = "http://www.gravatar.com/avatar/"+md5(this.state.email)+"?s=300";
@@ -62,14 +66,13 @@ Repositories = React.createClass({
 					<div className="card-content ctr"><p>{this.state.name}</p></div>
 				</div>
 				<ul className="collection">
-					<ReactCSSTransitionGroup transitionName="content-change" transitionLeave={false}>
-					{repos}
+                    {repos}
 					<li className="ctr collection-item">
 						<a className="btn-flat waves-effect waves-light btn-flat" onClick={this.addRepo}>
 							<i className="mdi-content-add"></i>
 						</a>
 					</li>
-					</ReactCSSTransitionGroup>
+
 				</ul>
 		</div>);
 		var loader = (

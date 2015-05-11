@@ -10,8 +10,8 @@ var AddRepoModal = React.createClass({
 			{
 				action : "add_repo",
 				data : {
-					url : this.ref.repo_name.getValue(),
-					name : this.ref.repo_name.getValue()
+					url : this.refs.repo_name.getValue(),
+					name : this.refs.repo_name.getValue()
 				}
 			}, 
 			function(data){

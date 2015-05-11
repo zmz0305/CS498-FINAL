@@ -14,27 +14,36 @@ Repository = React.createClass({
 	refresh: function(){
 		$.get("/api/repositories/"+this.props.repo_id, (function(data){
 			if (data.status == "success"){
-				this.setState({id: data.data.id});
+				this.setState({id: data.data._id});
 				this.setState({name: data.data.name});
 				this.setState({url: data.data.url});
 				this.setState({contents: data.data.contents});
 			}
+            this.handleClick();
 		}).bind(this));
 		this.setState({loaded: true});	
 	},
 	handleClick : function(){
+        console.log("output");
+        console.log(this.state);
 		window.actions.changeContent(this.state.contents, this.state.name, this.state.id);
 		window.actions.changeRepoFocus(this.props.repo_id);
 	},
 	handleDelete : function(event){
 		var del = (function(){
-			$.post('/user',
+            console.log(this.state);
+            console.log(this.state.id);
+
+            $.post('/api/user',
 				{
 					"action" : "delete_repo",
-					"data" : this.state.id
+					"data" : {
+                        "id" : this.state.id
+                    }
 				},
 				function(){
-					window.actions.refreshRepositories();
+
+                    window.actions.refreshRepositories();
 				});
 		}).bind(this);
 		var dom = (<ConfirmationModal execute={del}>Are you sure you want to delete it?</ConfirmationModal>);
