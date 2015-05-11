@@ -27,10 +27,10 @@ var Contents = React.createClass({displayName: "Contents",
 		if (this.state.content_ids){
 			this.setState({loaded: true});
 		}
-        this.state.content_ids.each((function(data){
-            traversal($("#page_data"));
-            this.refs[data].componentDidMount();
-        }).bind(this));
+        // this.state.content_ids.each((function(data){
+        //     traversal($("#page_data"));
+        //     this.refs[data].componentDidMount();
+        // }).bind(this));
 
 	},
 	changeContent : function(content_ids, repo_name, id, html){
