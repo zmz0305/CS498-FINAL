@@ -8,12 +8,14 @@ var router = express.Router();
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var request = require('request');
 
 var routes = require('./routes/index');
 //var users = require('./routes/users');
 var contents = require('./routes/contents');
 var login = require('./routes/login');
 var repositories = require('./routes/repositories');
+var download = require('./routes/download');
 
 mongoose.connect('mongodb://foo:bar@ds055709.mongolab.com:55709/cs498finalproject');
 
@@ -38,6 +40,7 @@ app.use('/api', routes);
 app.use('/api/repositories', repositories);
 //app.use('/api/user', users);
 app.use('/api/contents', contents);
+app.use('/api/download', download);
 
 // view engine setup
 //app.set('views', path.join(__dirname, 'views'));
