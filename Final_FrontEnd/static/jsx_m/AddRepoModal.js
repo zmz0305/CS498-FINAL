@@ -1,6 +1,7 @@
 var AddRepoModal = React.createClass({
 	getInitialState : function(){
-		return {};
+		return {
+		};
 	},
 	handleCancel: function(){
 		window.actions.closeModal();
@@ -37,3 +38,5 @@ var AddRepoModal = React.createClass({
 		)
 	}
 });
+
+
