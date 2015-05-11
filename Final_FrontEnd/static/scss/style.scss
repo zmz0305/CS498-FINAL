@@ -183,24 +183,18 @@ a, span, h1, h2, h3, h4, h5, h6, div, p{
 			span{
 				font-size: 20px;
 			}
-			.toogleup{
+			.toggleup{
 				text-align: right;
 				// position: fixed;
 				right: $small-magrin;
 				padding-right : $medium-padding;
-				&:before{
-					font-family: FontAwesome;
-					content: "\f078";
-				}
+				font-family: FontAwesome;
 			}
-			.toogledown{
+			.toggledown{
 				right: $small-magrin;
 				padding-right: $medium-padding;
 				position: fixed;
-				&:before{
-					font-family: FontAwesome;
-					content: "\f077";
-				}
+				font-family: FontAwesome;
 			}
 		}
 	}
