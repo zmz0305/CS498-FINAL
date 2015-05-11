@@ -68,7 +68,7 @@ var Contents = React.createClass({displayName: "Contents",
                     React.createElement("div", {id: "page_data", dangerouslySetInnerHTML: {__html: this.state.html}, style: {display : "none"}}), 
 					React.createElement("h1", null, "Class: ", this.state.repo_name), 
 					React.createElement("ul", {className: "collapsible"}, 
-						React.createElement(ReactCSSTransitionGroup, {transitionName: "content-change", transitionLeave: false}, 
+						React.createElement(ReactCSSTransitionGroup, {transitionName: "content-change", transitionLeave: false, transitionEnter: false}, 
 					  		content_ids
 					  	), 
 					  React.createElement("li", {className: "ctr"}, 
