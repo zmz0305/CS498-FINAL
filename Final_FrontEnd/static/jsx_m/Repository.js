@@ -26,7 +26,7 @@ Repository = React.createClass({
 	handleClick : function(){
         console.log("output");
         console.log(this.state);
-		window.actions.changeContent(this.state.contents, this.state.name, this.state.id);
+		window.actions.changeContent(this.state.contents, this.state.name, this.state.id, this.state.url);
 		window.actions.changeRepoFocus(this.props.repo_id);
 	},
 	handleDelete : function(event){

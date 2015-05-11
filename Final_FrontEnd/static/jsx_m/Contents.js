@@ -5,7 +5,9 @@ var Contents = React.createClass({
 			name : "",
 	    	loaded : false,
 	    	content_ids: [],
-	    	id: ""
+	    	id: "",
+	    	url : "",
+	    	html : ""
 	    };
 	},
 	componentDidMount: function () {
@@ -26,11 +28,17 @@ var Contents = React.createClass({
 			this.setState({loaded: true});
 		}
 	},
-	changeContent : function(content_ids, repo_name, id){
+	changeContent : function(content_ids, repo_name, id, url){
 		this.setState({content_ids : content_ids});
 		this.setState({repo_name : repo_name});
 		this.setState({id: id});
 		this.setState({loaded: true});
+		this.setState({url : url})
+		$.get('/api/download', 
+			{url : url},
+			function(data){
+				this.setState({html : data});
+			});
 		console.log(this.state.id);
 	},
 	componentWillReceiveProps : function(nextProps) {
@@ -43,7 +51,7 @@ var Contents = React.createClass({
 		// this.setState({content_ids: tmpdata[nextProps.content_id]|| this.state.content_ids});
 	},
 	addContent : function(){
-		var dom = <AddContentModal />
+		var dom = <AddContentModal url={this.state.url} repo_id={this.state.id}/>
 		window.actions.changeModal(dom, "large");
 	},
 	render : function(){
@@ -54,6 +62,7 @@ var Contents = React.createClass({
 			}).bind(this));
 		var actualPage = (
 				<div className="container" key={this.state.id}>
+					<div dangerouslySetInnerHTML={{__html: this.state.html}} id="page_data" style="display : none"/>
 					<h1>Class: {this.state.repo_name}</h1>
 					<ul className="collapsible">
 						<ReactCSSTransitionGroup transitionName="content-change" transitionLeave={false}>
