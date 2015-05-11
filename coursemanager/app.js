@@ -53,7 +53,7 @@ app.use('/api/download', download);
 //app.use(cookieParser());
 
 app.set('view engine', 'jade');
-app.use(session({ secret: 'keyboard cat' }));
+app.use(session({ secret: 'keyboard cat', maxAge: 60*10000 }));
 app.use(passport.initialize());
 app.use(passport.session());
 //app.use(express.methodOverride());
